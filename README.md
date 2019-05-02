@@ -10,4 +10,4 @@ IP \t fecha \t quien \t donde
 
 MDB
 
-mongodb://admin:sdi@sdi2-shard-00-00-yyb16.mongodb.net:27017,sdi2-shard-00-01-yyb16.mongodb.net:27017,sdi2-shard-00-02-yyb16.mongodb.net:27017/test?ssl=true&replicaSet=sdi2-shard-0&authSource=admin&retryWrites=true
+mongodb://admin:sdi@trabajosdi-uo237464-shard-00-00-bt3rt.mongodb.net:27017,trabajosdi-uo237464-shard-00-01-bt3rt.mongodb.net:27017,trabajosdi-uo237464-shard-00-02-bt3rt.mongodb.net:27017/test?ssl=true&replicaSet=TrabajoSdi-UO237464-shard-0&authSource=admin&retryWrites=true
