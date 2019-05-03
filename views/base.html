@@ -25,14 +25,21 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li id="mTienda" class="active"><a href="/tienda">Tienda</a></li>
+                {% if rol == 'admin' %}
+                <li id="mUsuarios" class="active"><a href="/adm/users">Ver Usuarios</a></li>
+                {% endif %}
+                {% if usuario != null || usuario != undefined %}
                 <li id="mPublicaciones"><a href="/publicaciones">Publicaciones</a></li>
-                <li id="mCompras"><a href="/compras">Compras</a></li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {% if usuario == null || usuario == undefined %}
                 <li><a href="/registrarse"><span class="glyphicon glyphicon-user"></span> Registrate</a></li>
                 <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Identifícate</a></li>
+                {%endif%}
+                {% if usuario != null || usuario != undefined %}
                 <li><a href="/desconectarse"><span class="glyphicon glyphicon-log-in"></span> Desconectarse</a></li>
+                {%endif%}
             </ul>
         </div>
     </div>
@@ -43,13 +50,14 @@
     <script>
         var mensaje = getUrlParameter('mensaje');
         var tipoMensaje = getUrlParameter('tipoMensaje');
-        if ( mensaje != ""){
-            if (tipoMensaje == "" ){
+        if (mensaje != "") {
+            if (tipoMensaje == "") {
                 tipoMensaje = 'alert-info';
             }
-            $( ".container" )
-                .append("<div class='alert "+tipoMensaje+"'>"+mensaje+" </div>");
+            $(".container")
+                .append("<div class='alert " + tipoMensaje + "'>" + mensaje + " </div>");
         }
+
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
