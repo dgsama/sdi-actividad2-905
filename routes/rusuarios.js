@@ -92,10 +92,53 @@ module.exports = function (app, swig, gestorBD) {
     //MANEJO DE USUARIOS
 
     app.get("/adm/users", function (req, res) {
-        var respuesta = swig.renderFile('views/listUsers.html', {});
-        res.send(respuesta);
+        var criterio = {
+            rol: "user"
+        };
+        gestorBD.obtenerUsuarios(criterio, function (usuarios) {
+            if (usuarios == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/listUsers.html', {
+                    usuario: req.session.usuario,
+                    dinero: req.session.dinero,
+                    rol: req.session.rol,
+                    usuarios: usuarios
+                });
+                res.send(respuesta);
+            }
+        });
     });
 
+
+    app.post('/adm/eliminarUsuariosSeleccionados/', function (req, res) {
+        let ids = req.body.idsSelectedUsers;
+        if (!Array.isArray(ids)) {
+            let aux = ids;
+            ids = [];
+            ids.push(aux);
+        }
+        let criterio = {
+            email: {$in: ids}
+        };
+        gestorBD.eliminarUsuario(criterio, function (usuarios) {
+            if (usuarios == null) {
+                console.log("Fallo al eliminar usuarios");
+            } else {
+                let criterio = {
+                    creador: {$in: ids}
+                };
+                gestorBD.eliminarOferta(criterio, function (ofertas) {
+                    if (ofertas == null) {
+                        console.log("Fallo al eliminar ofertas creadas por los usuarios borrados");
+                    } else {
+                        res.redirect("/adm/users" + "?mensaje=Usuarios borrados con exito junto con su información" +
+                            "&tipoMensaje=alert-success ");
+                    }
+                });
+            }
+        });
+    })
 
 //FIN DEL ARCHIVO
 };

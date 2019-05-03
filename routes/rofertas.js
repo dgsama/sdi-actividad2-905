@@ -3,20 +3,66 @@ module.exports = function (app, swig, gestorBD) {
 
     //HOME
     app.get("/home", function (req, res) {
-        var respuesta = swig.renderFile('views/home.html', {
-            usuario: req.session.usuario,
-            dinero: req.session.dinero,
-            rol: req.session.rol
+        var criterio={};
+        gestorBD.obtenerOfertas(criterio, function (ofertas) {
+            if (ofertas == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/home.html', {
+                    usuario: req.session.usuario,
+                    dinero: req.session.dinero,
+                    rol: req.session.rol,
+                    ofertas:ofertas
+                });
+                res.send(respuesta);
+            }
         });
-        res.send(respuesta);
+
     });
 
     //LISTAR OFERTAS
 
+    app.get("/usr/listarCreadas", function (req, res) {
+        var criterio = {creador: req.session.usuario};
+        gestorBD.obtenerOfertas(criterio, function (ofertas) {
+            if (ofertas == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/listOwnOffers.html', {
+                    usuario: req.session.usuario,
+                    dinero: req.session.dinero,
+                    rol: req.session.rol,
+                    ofertas: ofertas
+                });
+                res.send(respuesta);
+            }
+        });
+    });
+
+    app.get("/usr/listarCompradas", function (req, res) {
+        var criterio = {comprador: req.session.usuario};
+        gestorBD.obtenerOfertas(criterio, function (ofertas) {
+            if (ofertas == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/listBoughtOffers.html', {
+                    usuario: req.session.usuario,
+                    dinero: req.session.dinero,
+                    rol: req.session.rol,
+                    ofertas: ofertas
+                });
+                res.send(respuesta);
+            }
+        });
+    });
 
     //AGREGAR OFERTA
     app.get("/usr/agregarOferta", function (req, res) {
-        var respuesta = swig.renderFile('views/addOffer.html', {});
+        var respuesta = swig.renderFile('views/addOffer.html', {
+            usuario: req.session.usuario,
+            dinero: req.session.dinero,
+            rol: req.session.rol
+        });
         res.send(respuesta);
     });
 
@@ -46,7 +92,7 @@ module.exports = function (app, swig, gestorBD) {
                                         "&tipoMensaje=alert-success ");
                                 }
                             });
-                        } else if (req.body.destacada == "true" && prueba > 0) {
+                        } else if (req.body.destacada == "true" && prueba >= 0) {
                             gestorBD.insertarOferta(oferta, function (id) {
                                 if (id == null) {
                                     res.redirect("/registrarse" +
@@ -99,6 +145,19 @@ module.exports = function (app, swig, gestorBD) {
             }
         }
     );
+//ELIMINAR OFERTA
+
+    app.get('/usr/eliminarOferta/:id', function (req, res) {
+        var criterio = {"_id" : gestorBD.mongo.ObjectID(req.params.id) };
+        gestorBD.eliminarOferta(criterio,function(ofertas){
+            if ( ofertas == null ){
+                res.send(respuesta);
+            } else {
+                res.redirect("/usr/listarCreadas" + "?mensaje=Oferta eliminada con exito" +
+                    "&tipoMensaje=alert-success ");
+            }});
+    })
+
 
 
 //COMPRAR OFERTA
