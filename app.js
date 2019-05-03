@@ -28,6 +28,40 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+// routerUsuarioSession
+var routerUsuarioSession = express.Router();
+routerUsuarioSession.use(function(req, res, next) {
+    console.log("routerUsuarioSession");
+    if ( req.session.usuario ) {
+        // dejamos correr la petición
+        next();
+    } else {
+        res.redirect("/login");
+    }
+});
+//Aplicar routerUsuarioSession
+app.use("/home",routerUsuarioSession);
+app.use("/usr/",routerUsuarioSession);
+app.use("/adm/",routerUsuarioSession);
+app.use("/desconectarse",routerUsuarioSession);
+
+
+var routerAdmin = express.Router();
+routerAdmin.use(function(req, res, next) {
+    console.log("routerAdmin");
+    if ( req.session.usuario  && req.session.rol =="admin") {
+        // dejamos correr la petición
+        next();
+    } else {
+        req.session.usuario=null;
+        res.redirect("/login");
+    }
+});
+
+app.use("/adm/",routerAdmin);
+
+
+
 
 app.use(express.static('public'));
 

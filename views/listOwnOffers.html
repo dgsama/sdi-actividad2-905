@@ -25,6 +25,13 @@
             <td>
                 <a href="/usr/eliminarOferta/{{ oferta._id.toString() }}">Eliminar</a> <br>
             </td>
+            <td>
+                {%if oferta.destacada == "false" %}
+                <a href="/usr/marcarDestacada/{{ oferta._id.toString() }}">Marcar como destacada</a> <br>{%endif%}
+                {%if oferta.destacada == "true"%}
+                <p style="color: green" >Destacada</p>
+                {%endif%}
+            </td>
         </tr>
         {% endfor %}
         </tbody>
