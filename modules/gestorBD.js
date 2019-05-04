@@ -152,26 +152,156 @@ module.exports = {
 
     //OBTENER OFERTAS PAGINACION
 
-    obtenerOfertasPg : function(criterio,pg,funcionCallback){
-    this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+    obtenerOfertasPg: function (criterio, pg, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('ofertas');
+                collection.count(function (err, count) {
+                    collection.find(criterio).skip((pg - 1) * 5).limit(5)
+                        .toArray(function (err, ofertas) {
+                            if (err) {
+                                funcionCallback(null);
+                            } else {
+                                funcionCallback(ofertas, count);
+                            }
+                            db.close();
+                        });
+                });
+            }
+        });
+    },
+    //INSERTAR MENSAJE
+    insertarConversacion: function (conversacion, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('conversaciones');
+                collection.insert(conversacion, function (err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result.ops[0]._id);
+                    }
+                    db.close();
+                });
+            }
+        });
+    }
+    ,
+
+    //OBTENER CONVERSACIONES
+    obtenerConversaciones: function (criterio, funcionCallback) {
+    this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
         if (err) {
             funcionCallback(null);
         } else {
-            var collection = db.collection('ofertas');
-            collection.count(function(err, count){
-                collection.find(criterio).skip( (pg-1)*5 ).limit( 5 )
-                    .toArray(function(err, ofertas) {
-                        if (err) {
-                            funcionCallback(null);
-                        } else {
-                            funcionCallback(ofertas, count);
-                        }
-                        db.close();
-                    });
+            var collection = db.collection('conversaciones');
+            collection.find(criterio).toArray(function (err, conversaciones) {
+                if (err) {
+                    funcionCallback(null);
+                } else {
+                    funcionCallback(conversaciones);
+                }
+                db.close();
             });
         }
     });
-}
+},
+
+    //INSERTAR MENSAJE
+    insertarMensaje: function (mensaje, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('mensajes');
+                collection.insert(mensaje, function (err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result.ops[0]._id);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
+
+    //OBTENER MENSAJES
+    obtenerMensajes: function (criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('mensajes');
+                collection.find(criterio).toArray(function (err, mensajes) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(mensajes);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
+    //MODIFICAR MENSAJE
+    modificarMensaje: function (criterio, mensaje, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('mensajes');
+                collection.update(criterio, {$set: mensaje}, function (err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
+    //ELIMINAR CONVERSACION
+    eliminarConversacion: function (criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('conversaciones');
+                collection.removeMany(criterio, function (err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+                    }
+                    db.close();
+                });
+            }
+        });
+    }, eliminarMensajes: function (criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('mensajes');
+                collection.removeMany(criterio, function (err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+                    }
+                    db.close();
+                });
+            }
+        });
+    }
+
+
 
 
 //FIN DEL ARCHIVO

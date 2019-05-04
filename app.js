@@ -110,7 +110,11 @@ routerUsuarioToken.use(function(req, res, next) {
     }
 });
 // Aplicar routerUsuarioToken
-//app.use('/api/cancion', routerUsuarioToken);
+app.use('/api/ofertas', routerUsuarioToken);
+app.use('/api/borrarConver/', routerUsuarioToken);
+app.use('/api/crearMensaje/', routerUsuarioToken);
+app.use('/api/conversaciones/', routerUsuarioToken);
+app.use('/api/marcarLeido/', routerUsuarioToken);
 
 
 
@@ -124,6 +128,7 @@ app.set('port', 8081);
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app, swig, gestorBD);
 require("./routes/rofertas.js")(app, swig, gestorBD);
+require("./routes/rapiwallapop.js")(app, gestorBD);
 
 //Página principal
 app.get('/', function (req, res) {

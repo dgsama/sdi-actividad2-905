@@ -1,0 +1,69 @@
+<div id="widget-canciones">
+    <button class="btn" onclick="cargarOfertas()">Actualizar</button>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Creador</th>
+            <th class="col-md-1"></th>
+        </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+
+        </tbody>
+    </table>
+</div>
+<script>
+    window.history.pushState("", "", "/cliente.html?w=ofertas");
+    var ofertas;
+
+    function cargarOfertas() {
+        $.ajax({
+            url: URLbase + "/ofertas",
+            type: "GET",
+            data: {},
+            dataType: 'json',
+            headers: {"token": token, "email": email},
+
+            success: function (respuesta) {
+                ofertas = respuesta;
+                actualizarTabla(ofertas);
+            },
+            error: function (error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        });
+    }
+
+    function actualizarTabla(ofertasMostrar) {
+        $("#tablaCuerpo").empty(); // Vaciar la tabla
+        for (i = 0; i < ofertasMostrar.length; i++) {
+            $("#tablaCuerpo").append(
+                "<tr id=" + ofertasMostrar[i]._id + ">" +
+                "<td>" + ofertasMostrar[i].titulo + "</td>" +
+                "<td>" + ofertasMostrar[i].descripcion + "</td>" +
+                "<td>" + ofertasMostrar[i].precio + "</td>" +
+                "<td>" + ofertasMostrar[i].creador + "</td>" +
+                "<td>" +
+                "<a onclick=conversacion('"+ ofertasMostrar[i]._id+"','"+ofertasMostrar[0].creador+"')>Detalles</a><br>" +
+                "</td>" +
+                "</tr>");
+            // Mucho cuidado con las comillas del eliminarCancion
+            //la id tiene que ir entre comillas ' '
+        }
+    }
+
+    cargarOfertas();
+
+
+    function conversacion(_id,creadr) {
+        idOfertaSeleccionada = _id;
+        vendedor = creadr;
+        $("#contenedor-principal").load("widget-conversacion.html");
+    }
+
+
+
+</script>
