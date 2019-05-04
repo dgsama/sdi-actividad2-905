@@ -7,6 +7,22 @@ var swig = require('swig');
 var crypto = require('crypto');
 var expressSession = require('express-session');
 
+//API
+var jwt = require('jsonwebtoken');
+app.set('jwt',jwt);
+
+
+//JQUERY
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, UPDATE, PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");
+    // Debemos especificar todas las headers que se aceptan. Content-Type , token
+    next();
+});
+
+
 app.use(expressSession({
     secret: 'abcdefg',
     resave: true,
@@ -59,6 +75,43 @@ routerAdmin.use(function(req, res, next) {
 });
 
 app.use("/adm/",routerAdmin);
+
+
+//API ENRUTADOR
+// routerUsuarioToken
+var routerUsuarioToken = express.Router();
+routerUsuarioToken.use(function(req, res, next) {
+    // obtener el token, vía headers (opcionalmente GET y/o POST).
+    var token = req.headers['token'] || req.body.token || req.query.token;
+    if (token != null) {// verificar el token
+        jwt.verify(token, 'secreto', function(err, infoToken) {
+            if (err || (Date.now()/1000 - infoToken.tiempo) > 240 ){
+                res.status(403); // Forbidden
+                res.json({
+                    acceso : false,
+                    error: 'Token invalido o caducado'
+                });
+                // También podríamos comprobar que intoToken.usuario existe
+                return;
+
+            } else {
+                // dejamos correr la petición
+                res.usuario = infoToken.usuario;
+                next();
+            }
+        });
+
+    } else {
+        res.status(403); // Forbidden
+        res.json({
+            acceso : false,
+            mensaje: 'No hay Token'
+        });
+    }
+});
+// Aplicar routerUsuarioToken
+//app.use('/api/cancion', routerUsuarioToken);
+
 
 
 
