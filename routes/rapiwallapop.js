@@ -126,7 +126,8 @@ module.exports = function (app, gestorBD) {
                         var conversacion = {
                             oferta: req.params.id,
                             vendedor: req.headers.vendedor,
-                            posibleComprador: req.headers.email
+                            posibleComprador: req.headers.email,
+                            titulo: req.headers.tituloOfer
                         }
                         gestorBD.insertarConversacion(conversacion, function (id) {
                             if (id == null) {
@@ -205,7 +206,7 @@ module.exports = function (app, gestorBD) {
                         })
                     } else {
                         res.status(200);
-                        var resp = {convers:conversaciones, mens: mensajes};
+                        var resp = {convers: conversaciones, mens: mensajes};
                         res.send(JSON.stringify(resp));
                     }
                 });
@@ -213,6 +214,46 @@ module.exports = function (app, gestorBD) {
         });
     });
 
+
+    //OBTENER CONVERSACIONES PARA EL USUARIO
+    app.get("/api/conversUsuario", function (req, res) {
+        criterio = {
+            $or: [{vendedor: req.headers.email}, {posibleComprador: req.headers.email}]
+        }
+
+        gestorBD.obtenerConversaciones(criterio, function (conversaciones) {
+            if (conversaciones == null) {
+                res.status(500);
+                res.json({
+                    error: "se ha producido un error"
+                })
+            } else {
+                res.status(200);
+                res.send(JSON.stringify(conversaciones));
+            }
+        });
+    });
+
+//OBTENER MENSAJES CONVERSACION
+    app.get("/api/mensajesConversacion/:id", function (req, res) {
+       var criterio = {
+            conversacion: req.params.id
+        }
+
+        gestorBD.obtenerMensajes(criterio, function (mensajes) {
+            if (mensajes == null) {
+                res.status(500);
+                res.json({
+                    error: "se ha producido un error"
+                })
+            } else {
+                res.status(200);
+                var resp = {idCon: req.params.id, mens: mensajes};
+
+                res.send(JSON.stringify(resp));
+            }
+        });
+    });
 
     //FIN ARCHIVO
 }

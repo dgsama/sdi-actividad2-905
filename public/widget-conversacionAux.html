@@ -34,11 +34,11 @@
 
     function cargarConver() {
         $.ajax({
-            url: URLbase + "/conversaciones/" + idOfertaSeleccionada,
+            url: URLbase + "/mensajesConversacion/" + idConversacion,
             type: "GET",
             data: {},
             dataType: 'json',
-            headers: {"token": token, "email": email, "vendedor": vendedor, "tituloOfer":tituloOfertaAct},
+            headers: {"token": token, "email": email},
             success: function (respuesta) {
                 conver = respuesta.mens;
                 idCon = respuesta.idCon;

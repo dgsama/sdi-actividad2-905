@@ -115,6 +115,8 @@ app.use('/api/borrarConver/', routerUsuarioToken);
 app.use('/api/crearMensaje/', routerUsuarioToken);
 app.use('/api/conversaciones/', routerUsuarioToken);
 app.use('/api/marcarLeido/', routerUsuarioToken);
+app.use('/api/conversUsuario/', routerUsuarioToken);
+app.use('/api/mensajesConversacion/', routerUsuarioToken);
 
 
 
