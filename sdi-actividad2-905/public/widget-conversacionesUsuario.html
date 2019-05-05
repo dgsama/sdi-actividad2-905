@@ -1,0 +1,79 @@
+<div id="widget-detalles">
+    <button class="btn" onclick="cargarConversaciones()">Actualizar</button>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Creador</th>
+            <th>Oferta</th>
+            <th class="col-md-1"></th>
+        </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+
+        </tbody>
+    </table>
+</div>
+<script>
+    window.history.pushState("", "", "/cliente.html?w=conversaciones");
+    var conver;
+    var idCon;
+
+    function cargarConversaciones() {
+        $.ajax({
+            url: URLbase + "/conversUsuario/",
+            type: "GET",
+            data: {},
+            dataType: 'json',
+            headers: {"token": token, "email": email},
+            success: function (respuesta) {
+                convers = respuesta;
+                actualizarTabla(convers);
+            },
+            error: function (error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        });
+    }
+
+    function actualizarTabla(conversMostrar) {
+        $("#tablaCuerpo").empty(); // Vaciar la tabla
+        for (i = 0; i < conversMostrar.length; i++) {
+            $("#tablaCuerpo").append(
+                "<tr id=" + conversMostrar[i]._id + ">" +
+                "<td>" + conversMostrar[i].vendedor + "</td>" +
+                "<td>" + conversMostrar[i].titulo + "</td>" +
+                "<td>" +"<a onclick=conversacion('" + conversMostrar[i]._id + "')>Entrar conversacion</a><br>"+"</td>" +
+                "<td>" +"<a onclick=eliminar('" + conversMostrar[i]._id + "')>Eliminar conversacion</a><br>" +"</td>" +
+                "</tr>");
+            // Mucho cuidado con las comillas del eliminarCancion
+            //la id tiene que ir entre comillas ' '
+        }
+    }
+
+    cargarConversaciones();
+
+    function conversacion(_id) {
+        idConversacion = _id;
+        $("#contenedor-principal").load("widget-conversacionAux.html");
+    }
+    function eliminar( _id ) {
+        $.ajax({
+            url: URLbase + "/borrarConver/"+_id,
+            type: "DELETE",
+            data: { },
+            dataType: 'json',
+            headers: { "token": token },
+            success: function(respuesta) {
+                console.log("Eliminada: "+_id);
+                $( "#"+_id ).remove(); // eliminar el <tr> de la canción
+            },
+            error : function (error){
+                $( "#contenedor-principal" ).load("widget-login.html");
+            }
+        });
+        cargarCanciones();
+    }
+
+
+</script>

@@ -1,0 +1,14 @@
+{
+  "name": "sdi2_UO237464_905",
+  "Descripcion": "Aplicacion web trabajo nº2 de sdi 2019",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.1.4",
+    "express-session": "^1.16.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^2.2.33",
+    "swig": "^1.4.2"
+  }
+}
