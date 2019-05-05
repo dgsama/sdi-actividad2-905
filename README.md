@@ -7,7 +7,4 @@ LOGGER
 
 IP \t fecha \t quien \t donde
 
-
-MDB
-
-mongodb://admin:sdi@trabajosdi-uo237464-shard-00-00-bt3rt.mongodb.net:27017,trabajosdi-uo237464-shard-00-01-bt3rt.mongodb.net:27017,trabajosdi-uo237464-shard-00-02-bt3rt.mongodb.net:27017/test?ssl=true&replicaSet=TrabajoSdi-UO237464-shard-0&authSource=admin&retryWrites=true
+No se porque no se han borrado los demas archivos :(
