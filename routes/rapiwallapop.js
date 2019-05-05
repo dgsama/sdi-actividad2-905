@@ -127,7 +127,7 @@ module.exports = function (app, gestorBD) {
                             oferta: req.params.id,
                             vendedor: req.headers.vendedor,
                             posibleComprador: req.headers.email,
-                            titulo: req.headers.tituloOfer
+                            titulo: "Kit de supervivencia"
                         }
                         gestorBD.insertarConversacion(conversacion, function (id) {
                             if (id == null) {

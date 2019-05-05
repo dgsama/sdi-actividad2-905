@@ -1,5 +1,5 @@
 <div id="widget-detalles">
-    <button class="btn" onclick="cargar()">Actualizar</button>
+    <button class="btn" onclick="mandarMensaje()">Actualizar</button>
     <div class="form-group">
         <label class="control-label col-sm-2" for="texto">Texto:</label>
         <div class="col-sm-10">
@@ -38,7 +38,7 @@
             type: "GET",
             data: {},
             dataType: 'json',
-            headers: {"token": token, "email": email, "vendedor": vendedor, "tituloOfer":tituloOfertaAct},
+            headers: {"token": token, "email": email, "vendedor": vendedor},
             success: function (respuesta) {
                 conver = respuesta.mens;
                 idCon = respuesta.idCon;

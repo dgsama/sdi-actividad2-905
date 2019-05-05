@@ -1,5 +1,5 @@
 <div id="widget-detalles">
-    <button class="btn" onclick="actualizarTabla()">Actualizar</button>
+    <button class="btn" onclick="cargarConversaciones()">Actualizar</button>
 
     <table class="table table-hover">
         <thead>
@@ -15,7 +15,7 @@
     </table>
 </div>
 <script>
-
+    window.history.pushState("", "", "/cliente.html?w=conversaciones");
     var conver;
     var idCon;
 

@@ -47,8 +47,7 @@
                 "<td>" + ofertasMostrar[i].precio + "</td>" +
                 "<td>" + ofertasMostrar[i].creador + "</td>" +
                 "<td>" +
-                "<a onclick=conversacion('"+ ofertasMostrar[i]._id+"','"+ofertasMostrar[i].creador+"','"+
-                ofertasMostrar[i].titulo+"')>Detalles</a><br>" +
+                "<a onclick=conversacion('"+ ofertasMostrar[i]._id+"','"+ofertasMostrar[i].creador+"')>Ver</a><br>" +
                 "</td>" +
                 "</tr>");
             // Mucho cuidado con las comillas del eliminarCancion
@@ -59,10 +58,10 @@
     cargarOfertas();
 
 
-    function conversacion(_id,creadr,tituloOferta) {
+    function conversacion(_id,creadr) {
         idOfertaSeleccionada = _id;
         vendedor = creadr;
-        tituloOfertaAct = tituloOferta;
+        tituloOfertaAct = "Kit de supervivencia";
         $("#contenedor-principal").load("widget-conversacion.html");
     }
 

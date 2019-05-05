@@ -222,7 +222,7 @@ module.exports = function (app, swig, gestorBD) {
                             console.log("dinero modificado con exito");
                         }
                     });
-                    res.redirect("/usr/listarCreadas" + "?mensaje=Oferta eliminada con exito" +
+                    res.redirect("/usr/listarCreadas" + "?mensaje=Oferta destacada con exito" +
                         "&tipoMensaje=alert-success ");
                 }
             });
@@ -261,12 +261,12 @@ module.exports = function (app, swig, gestorBD) {
                             console.log("dinero modificado con exito");
                         }
                     });
-                    res.redirect("/usr/home" + "?mensaje=Oferta comprada con exito" +
+                    res.redirect("/home" + "?mensaje=Oferta comprada con exito" +
                         "&tipoMensaje=alert-success ");
                 }
             });
         } else {
-            res.redirect("/usr/listarCreadas" + "?mensaje=No tienes suficiente dinero para comprar esta oferta" +
+            res.redirect("/home" + "?mensaje=No tienes suficiente dinero para comprar esta oferta" +
                 "&tipoMensaje=alert-danger ");
         }
     })
